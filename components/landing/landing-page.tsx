@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ScrollHeroSequence } from "@/components/landing/scroll-hero-sequence";
 import { cn } from "@/lib/utils";
 
 const capabilities = [
@@ -194,7 +195,7 @@ function SectionHeader({
 
 export function LandingPage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-black text-white">
+    <main className="min-h-screen bg-black text-white">
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-black/30 backdrop-blur-md">
         <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
           <a href="#top" className="flex items-center gap-3">
@@ -232,108 +233,101 @@ export function LandingPage() {
 
       <section
         id="top"
-        className="relative flex min-h-screen items-end overflow-hidden px-5 pb-14 pt-28 sm:px-8 lg:pb-20"
+        className="relative h-[320vh]"
       >
-        {/* HERO_BACKGROUND_VIDEO */}
-        <video
-          className="absolute inset-0 h-full w-full object-cover opacity-70"
-          src="/assets/hero.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.2)_60%,rgba(0,0,0,0.96)_100%)]" />
-        <div className="ritual-grid absolute inset-0 opacity-35" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
+        <div className="sticky top-0 flex h-screen items-end overflow-hidden px-5 pb-14 pt-28 sm:px-8 lg:pb-20">
+          {/* HERO_SCROLL_FRAME_SEQUENCE */}
+          <ScrollHeroSequence className="absolute inset-0 h-full w-full object-cover opacity-70" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.2)_60%,rgba(0,0,0,0.96)_100%)]" />
+          <div className="ritual-grid absolute inset-0 opacity-35" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
 
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-end">
-          <div className="max-w-4xl">
-            <p
-              className="intro-reveal mb-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-normal text-red-300"
-              style={revealDelay(80)}
-            >
-              <Eye className="size-4" />
-              Organic sci-fi interface studio
-            </p>
-            <h1
-              className="intro-reveal text-5xl font-black leading-[0.94] tracking-normal text-white sm:text-6xl lg:text-8xl"
-              style={revealDelay(160)}
-            >
-              Space
-              <br />
-              Tomato
-            </h1>
-            <p
-              className="intro-reveal mt-7 max-w-2xl text-2xl font-semibold leading-tight text-white sm:text-3xl lg:text-4xl"
-              style={revealDelay(260)}
-            >
-              We don&apos;t build websites.
-              <br />
-              We summon experiences.
-            </p>
-            <p
-              className="intro-reveal mt-6 max-w-xl text-base leading-7 text-white/64 sm:text-lg"
-              style={revealDelay(360)}
-            >
-              A landing system for brands that need presence, tension, and a
-              page that behaves like it knows the visitor is there.
-            </p>
-            <div
-              className="intro-reveal mt-9 flex flex-col gap-3 sm:flex-row"
-              style={revealDelay(460)}
-            >
-              <a
-                href="#contact"
-                className={cn(
-                  buttonVariants({ size: "lg" }),
-                  "h-12 rounded-lg bg-[#FF2D2D] px-6 text-white shadow-[0_0_20px_rgba(255,45,45,0.6)] hover:bg-red-500"
-                )}
+          <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-end">
+            <div className="max-w-4xl">
+              <p
+                className="intro-reveal mb-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-normal text-red-300"
+                style={revealDelay(80)}
               >
-                Start the Project
-                <ArrowRight />
-              </a>
-              <a
-                href="#works"
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-12 rounded-lg border-white/20 bg-white/[0.03] px-6 text-white hover:border-red-400/60 hover:bg-red-500/10"
-                )}
+                <Eye className="size-4" />
+                Organic sci-fi interface studio
+              </p>
+              <h1
+                className="intro-reveal text-5xl font-black leading-[0.94] tracking-normal text-white sm:text-6xl lg:text-8xl"
+                style={revealDelay(160)}
               >
-                View Works
-              </a>
+                Space
+                <br />
+                Tomato
+              </h1>
+              <p
+                className="intro-reveal mt-7 max-w-2xl text-2xl font-semibold leading-tight text-white sm:text-3xl lg:text-4xl"
+                style={revealDelay(260)}
+              >
+                We don&apos;t build websites.
+                <br />
+                We summon experiences.
+              </p>
+              <p
+                className="intro-reveal mt-6 max-w-xl text-base leading-7 text-white/64 sm:text-lg"
+                style={revealDelay(360)}
+              >
+                A landing system for brands that need presence, tension, and a
+                page that behaves like it knows the visitor is there.
+              </p>
+              <div
+                className="intro-reveal mt-9 flex flex-col gap-3 sm:flex-row"
+                style={revealDelay(460)}
+              >
+                <a
+                  href="#contact"
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "h-12 rounded-lg bg-[#FF2D2D] px-6 text-white shadow-[0_0_20px_rgba(255,45,45,0.6)] hover:bg-red-500"
+                  )}
+                >
+                  Start the Project
+                  <ArrowRight />
+                </a>
+                <a
+                  href="#works"
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "lg" }),
+                    "h-12 rounded-lg border-white/20 bg-white/[0.03] px-6 text-white hover:border-red-400/60 hover:bg-red-500/10"
+                  )}
+                >
+                  View Works
+                </a>
+              </div>
             </div>
+
+            <aside
+              className="intro-reveal hidden rounded-md border border-red-500/15 bg-white/[0.03] p-5 text-sm text-white/70 shadow-[0_0_70px_rgba(138,15,15,0.22)] backdrop-blur-md lg:block"
+              style={revealDelay(560)}
+            >
+              <div className="mb-10 flex items-center justify-between">
+                <span className="text-xs uppercase tracking-normal text-red-300">
+                  Entity Link
+                </span>
+                <Orbit className="size-5 text-red-300" />
+              </div>
+              <div className="space-y-5">
+                {["Presence", "Tension", "Conversion"].map((item, index) => (
+                  <div key={item}>
+                    <div className="mb-2 flex items-center justify-between">
+                      <span>{item}</span>
+                      <span className="text-red-300">{88 + index * 4}%</span>
+                    </div>
+                    <div className="h-1 overflow-hidden rounded-full bg-white/8">
+                      <div
+                        className="h-full rounded-full bg-[#FF2D2D] shadow-[0_0_18px_rgba(255,45,45,0.7)]"
+                        style={{ width: `${88 + index * 4}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </aside>
           </div>
-
-          <aside
-            className="intro-reveal hidden rounded-md border border-red-500/15 bg-white/[0.03] p-5 text-sm text-white/70 shadow-[0_0_70px_rgba(138,15,15,0.22)] backdrop-blur-md lg:block"
-            style={revealDelay(560)}
-          >
-            <div className="mb-10 flex items-center justify-between">
-              <span className="text-xs uppercase tracking-normal text-red-300">
-                Entity Link
-              </span>
-              <Orbit className="size-5 text-red-300" />
-            </div>
-            <div className="space-y-5">
-              {["Presence", "Tension", "Conversion"].map((item, index) => (
-                <div key={item}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <span>{item}</span>
-                    <span className="text-red-300">{88 + index * 4}%</span>
-                  </div>
-                  <div className="h-1 overflow-hidden rounded-full bg-white/8">
-                    <div
-                      className="h-full rounded-full bg-[#FF2D2D] shadow-[0_0_18px_rgba(255,45,45,0.7)]"
-                      style={{ width: `${88 + index * 4}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </aside>
         </div>
       </section>
 
