@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
 import {
   ArrowRight,
@@ -19,6 +19,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollHeroSequence } from "@/components/landing/scroll-hero-sequence";
+import { ScrollStoryStage } from "@/components/landing/scroll-story-stage";
 import { cn } from "@/lib/utils";
 
 const capabilities = [
@@ -117,8 +118,20 @@ const contactDetails = [
   { label: "Address", value: "Songdo Centroad, Incheon, South Korea" },
 ];
 
-function revealDelay(ms: number): CSSProperties {
-  return { "--reveal-delay": `${ms}ms` } as CSSProperties;
+const storyPanelCount = 6;
+
+const storyAnchors = [
+  { id: "capabilities", panelIndex: 1 },
+  { id: "process", panelIndex: 2 },
+  { id: "works", panelIndex: 3 },
+  { id: "design-system", panelIndex: 4 },
+  { id: "contact", panelIndex: 5 },
+];
+
+function storyAnchorStyle(panelIndex: number): CSSProperties {
+  return {
+    top: `calc((100% - 100vh) * ${panelIndex / (storyPanelCount - 1)})`,
+  };
 }
 
 function PlaceholderFrame({
@@ -169,27 +182,325 @@ function PlaceholderFrame({
   );
 }
 
-function SectionHeader({
+function StorySectionHeader({
   eyebrow,
   title,
   description,
+  className,
 }: {
   eyebrow: string;
   title: string;
   description: string;
+  className?: string;
 }) {
   return (
-    <div className="reveal mx-auto mb-12 max-w-3xl text-center">
-      <p className="mb-4 text-xs font-semibold uppercase tracking-normal text-red-400">
+    <div className={cn("mx-auto mb-6 max-w-3xl text-center sm:mb-8", className)}>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-normal text-red-400 sm:mb-4">
         {eyebrow}
       </p>
-      <h2 className="text-3xl font-semibold leading-tight text-white sm:text-4xl">
+      <h2 className="text-2xl font-semibold leading-tight text-white sm:text-4xl">
         {title}
       </h2>
-      <p className="mt-5 text-base leading-7 text-white/60 sm:text-lg">
+      <p className="mt-4 text-sm leading-6 text-white/60 sm:mt-5 sm:text-lg sm:leading-7">
         {description}
       </p>
     </div>
+  );
+}
+
+function StoryPanelShell({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className="flex h-full w-full items-center px-5 pb-5 pt-20 sm:px-8 sm:pb-8 sm:pt-24 lg:py-20">
+      <div className={cn("mx-auto w-full max-w-7xl", className)}>{children}</div>
+    </div>
+  );
+}
+
+function HeroStoryPanel() {
+  return (
+    <StoryPanelShell className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-end">
+      <div className="max-w-4xl">
+        <p className="mb-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-normal text-red-300">
+          <Eye className="size-4" />
+          Organic sci-fi interface studio
+        </p>
+        <h1 className="text-5xl font-black leading-[0.94] tracking-normal text-white sm:text-6xl lg:text-8xl">
+          Space
+          <br />
+          Tomato
+        </h1>
+        <p className="mt-7 max-w-2xl text-2xl font-semibold leading-tight text-white sm:text-3xl lg:text-4xl">
+          We don&apos;t build websites.
+          <br />
+          We summon experiences.
+        </p>
+        <p className="mt-6 max-w-xl text-base leading-7 text-white/64 sm:text-lg">
+          A landing system for brands that need presence, tension, and a page
+          that behaves like it knows the visitor is there.
+        </p>
+        <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <a
+            href="#contact"
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "h-12 rounded-lg bg-[#FF2D2D] px-6 text-white shadow-[0_0_20px_rgba(255,45,45,0.6)] hover:bg-red-500"
+            )}
+          >
+            Start the Project
+            <ArrowRight />
+          </a>
+          <a
+            href="#works"
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-12 rounded-lg border-white/20 bg-white/[0.03] px-6 text-white hover:border-red-400/60 hover:bg-red-500/10"
+            )}
+          >
+            View Works
+          </a>
+        </div>
+      </div>
+
+      <aside className="hidden rounded-md border border-red-500/15 bg-white/[0.03] p-5 text-sm text-white/70 shadow-[0_0_70px_rgba(138,15,15,0.22)] backdrop-blur-md lg:block">
+        <div className="mb-10 flex items-center justify-between">
+          <span className="text-xs uppercase tracking-normal text-red-300">
+            Entity Link
+          </span>
+          <Orbit className="size-5 text-red-300" />
+        </div>
+        <div className="space-y-5">
+          {["Presence", "Tension", "Conversion"].map((item, index) => (
+            <div key={item}>
+              <div className="mb-2 flex items-center justify-between">
+                <span>{item}</span>
+                <span className="text-red-300">{88 + index * 4}%</span>
+              </div>
+              <div className="h-1 overflow-hidden rounded-full bg-white/8">
+                <div
+                  className="h-full rounded-full bg-[#FF2D2D] shadow-[0_0_18px_rgba(255,45,45,0.7)]"
+                  style={{ width: `${88 + index * 4}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </aside>
+    </StoryPanelShell>
+  );
+}
+
+function CapabilitiesStoryPanel() {
+  return (
+    <StoryPanelShell>
+      <StorySectionHeader
+        eyebrow="Capabilities"
+        title="Tools for interfaces that feel alive."
+        description="Each layer is built to serve the atmosphere first, then guide the visitor into a deliberate action."
+      />
+
+      <div className="grid gap-4 md:grid-cols-3">
+        {capabilities.map((item) => {
+          const Icon = item.icon;
+
+          return (
+            <Card
+              key={item.title}
+              size="sm"
+              className="group rounded-md border border-red-500/10 bg-black/45 py-3 text-white shadow-none backdrop-blur-md transition-all duration-300 hover:border-red-400/35 hover:shadow-[0_0_34px_rgba(255,45,45,0.18)] sm:py-0"
+            >
+              <PlaceholderFrame
+                comment={item.imageComment}
+                src={item.imageSrc}
+                alt={`${item.title} visual`}
+                className="hidden aspect-[16/8] rounded-b-none border-x-0 border-t-0 sm:block"
+              />
+              <CardHeader className="grid-cols-[auto_1fr] items-center gap-3 px-4 sm:block sm:px-5 sm:pt-5">
+                <div className="flex size-9 items-center justify-center rounded-md border border-red-500/20 bg-red-500/10 text-red-300 sm:mb-2 sm:size-10">
+                  <Icon className="size-5" />
+                </div>
+                <CardTitle className="text-lg font-semibold text-white sm:text-xl">
+                  {item.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="hidden px-4 pb-4 sm:block sm:px-5 sm:pb-6">
+                <CardDescription className="text-xs leading-5 text-white/62 sm:text-sm sm:leading-6">
+                  {item.description}
+                </CardDescription>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+    </StoryPanelShell>
+  );
+}
+
+function ProcessStoryPanel() {
+  return (
+    <StoryPanelShell>
+      <StorySectionHeader
+        eyebrow="Process"
+        title="A ritual path from weak signal to dominant presence."
+        description="The work grows, changes, and sharpens until the page can hold attention."
+      />
+
+      <div className="relative grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+        <div className="absolute left-0 top-7 hidden h-px w-full bg-red-500/20 shadow-[0_0_22px_rgba(255,45,45,0.5)] lg:block" />
+        {process.map((item) => (
+          <div key={item.label} className="relative">
+            <div className="mb-3 flex size-10 items-center justify-center rounded-full border border-red-500/30 bg-black text-red-200 shadow-[0_0_24px_rgba(255,45,45,0.18)] sm:mb-5 sm:size-14">
+              <span className="size-2 rounded-full bg-[#FF2D2D] shadow-[0_0_16px_rgba(255,45,45,0.8)]" />
+            </div>
+            <h3 className="text-base font-semibold text-white sm:text-xl">
+              {item.label}
+            </h3>
+            <p className="mt-2 max-w-sm text-xs leading-5 text-white/62 sm:mt-4 sm:text-sm sm:leading-7">
+              {item.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </StoryPanelShell>
+  );
+}
+
+function WorksStoryPanel() {
+  return (
+    <StoryPanelShell>
+      <StorySectionHeader
+        eyebrow="Selected Works"
+        title="Frames reserved for the worlds you want to reveal."
+        description="Cinematic interface worlds shaped around launch momentum, conversion pressure, content intelligence, and product presence."
+      />
+
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {works.map((item) => (
+          <article
+            key={item.title}
+            className="group relative overflow-hidden rounded-md border border-red-500/10 bg-black/45 transition duration-300 hover:border-red-400/35"
+          >
+            <PlaceholderFrame
+              comment={item.imageComment}
+              src={item.imageSrc}
+              alt={`${item.title} visual`}
+              sizes="(min-width: 1024px) 25vw, 50vw"
+              className="aspect-[4/3] rounded-none border-0 transition duration-500 group-hover:scale-[1.02]"
+            />
+            <div className="absolute inset-0 bg-red-600/0 transition duration-300 group-hover:bg-red-600/12" />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/78 to-transparent p-4">
+              <p className="text-xs font-semibold uppercase tracking-normal text-red-300">
+                {item.category}
+              </p>
+              <h3 className="mt-2 text-lg font-semibold text-white sm:text-xl">
+                {item.title}
+              </h3>
+            </div>
+          </article>
+        ))}
+      </div>
+    </StoryPanelShell>
+  );
+}
+
+function DesignSystemStoryPanel() {
+  return (
+    <StoryPanelShell>
+      <StorySectionHeader
+        eyebrow="Design System"
+        title="A restrained system for an aggressive mood."
+        description="Black carries the experience, red marks intent, and every element stays subordinate to the moving background entity."
+      />
+
+      <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:gap-5">
+        <div className="rounded-md border border-white/8 bg-black/45 p-3 backdrop-blur-md sm:p-5">
+          <div className="grid grid-cols-5 gap-2 sm:gap-3">
+            {palette.map((color) => (
+              <div
+                key={color.name}
+                className="rounded-md border border-white/8 p-2 sm:p-3"
+              >
+                <div
+                  className={cn("mb-2 h-10 rounded-md sm:mb-4 sm:h-16", color.className)}
+                />
+                <p className="truncate text-xs font-semibold text-white sm:text-sm">
+                  {color.name}
+                </p>
+                <p className="mt-1 hidden text-xs text-white/50 sm:block">
+                  {color.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-md border border-white/8 bg-black/45 p-4 backdrop-blur-md sm:p-6">
+          <p className="text-xs font-semibold uppercase tracking-normal text-red-300">
+            Type and Controls
+          </p>
+          <p className="mt-4 text-3xl font-black leading-none text-white sm:mt-5 sm:text-4xl">
+            Something is watching.
+          </p>
+          <p className="mt-3 text-sm leading-6 text-white/62 sm:mt-4 sm:text-base sm:leading-7">
+            Let&apos;s make them stay with sharp hierarchy, durable spacing,
+            and actions that glow only when they matter.
+          </p>
+          <div className="mt-5 flex flex-col gap-3 sm:mt-7 sm:flex-row">
+            <a
+              href="#contact"
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "h-12 rounded-lg bg-[#FF2D2D] px-6 text-white shadow-[0_0_20px_rgba(255,45,45,0.6)] hover:bg-red-500"
+              )}
+            >
+              Start the Project
+              <Sparkles />
+            </a>
+            <a
+              href="#works"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "hidden h-12 rounded-lg border-white/20 bg-transparent px-6 text-white hover:border-red-400/60 hover:bg-red-500/10 sm:inline-flex"
+              )}
+            >
+              View Works
+            </a>
+          </div>
+        </div>
+      </div>
+    </StoryPanelShell>
+  );
+}
+
+function FinalInvocationStoryPanel() {
+  return (
+    <StoryPanelShell className="max-w-4xl text-center">
+      <p className="mb-5 text-xs font-semibold uppercase tracking-normal text-red-300">
+        Final Invocation
+      </p>
+      <h2 className="text-4xl font-black leading-tight text-white sm:text-6xl">
+        Ready to summon something extraordinary?
+      </h2>
+      <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/68 sm:text-lg">
+        Bring the story, product, or campaign. We will shape the interface into
+        something visitors remember before they understand why.
+      </p>
+      <a
+        href="mailto:milli@molluhub.com"
+        className={cn(
+          buttonVariants({ size: "lg" }),
+          "mt-9 h-12 rounded-lg bg-[#FF2D2D] px-6 text-white shadow-[0_0_20px_rgba(255,45,45,0.6)] hover:bg-red-500"
+        )}
+      >
+        Start the Project
+        <ArrowRight />
+      </a>
+    </StoryPanelShell>
   );
 }
 
@@ -233,302 +544,36 @@ export function LandingPage() {
 
       <section
         id="top"
-        className="relative h-[320vh]"
+        className="relative h-[720vh]"
       >
-        <div className="sticky top-0 flex h-screen items-end overflow-hidden px-5 pb-14 pt-28 sm:px-8 lg:pb-20">
+        {storyAnchors.map((anchor) => (
+          <span
+            key={anchor.id}
+            id={anchor.id}
+            className="absolute left-0 size-px"
+            style={storyAnchorStyle(anchor.panelIndex)}
+            aria-hidden="true"
+          />
+        ))}
+
+        <div className="sticky top-0 h-screen overflow-hidden">
           {/* HERO_SCROLL_FRAME_SEQUENCE */}
           <ScrollHeroSequence className="absolute inset-0 h-full w-full object-cover opacity-70" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.2)_60%,rgba(0,0,0,0.96)_100%)]" />
           <div className="ritual-grid absolute inset-0 opacity-35" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
 
-          <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-end">
-            <div className="max-w-4xl">
-              <p
-                className="intro-reveal mb-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-normal text-red-300"
-                style={revealDelay(80)}
-              >
-                <Eye className="size-4" />
-                Organic sci-fi interface studio
-              </p>
-              <h1
-                className="intro-reveal text-5xl font-black leading-[0.94] tracking-normal text-white sm:text-6xl lg:text-8xl"
-                style={revealDelay(160)}
-              >
-                Space
-                <br />
-                Tomato
-              </h1>
-              <p
-                className="intro-reveal mt-7 max-w-2xl text-2xl font-semibold leading-tight text-white sm:text-3xl lg:text-4xl"
-                style={revealDelay(260)}
-              >
-                We don&apos;t build websites.
-                <br />
-                We summon experiences.
-              </p>
-              <p
-                className="intro-reveal mt-6 max-w-xl text-base leading-7 text-white/64 sm:text-lg"
-                style={revealDelay(360)}
-              >
-                A landing system for brands that need presence, tension, and a
-                page that behaves like it knows the visitor is there.
-              </p>
-              <div
-                className="intro-reveal mt-9 flex flex-col gap-3 sm:flex-row"
-                style={revealDelay(460)}
-              >
-                <a
-                  href="#contact"
-                  className={cn(
-                    buttonVariants({ size: "lg" }),
-                    "h-12 rounded-lg bg-[#FF2D2D] px-6 text-white shadow-[0_0_20px_rgba(255,45,45,0.6)] hover:bg-red-500"
-                  )}
-                >
-                  Start the Project
-                  <ArrowRight />
-                </a>
-                <a
-                  href="#works"
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "lg" }),
-                    "h-12 rounded-lg border-white/20 bg-white/[0.03] px-6 text-white hover:border-red-400/60 hover:bg-red-500/10"
-                  )}
-                >
-                  View Works
-                </a>
-              </div>
-            </div>
-
-            <aside
-              className="intro-reveal hidden rounded-md border border-red-500/15 bg-white/[0.03] p-5 text-sm text-white/70 shadow-[0_0_70px_rgba(138,15,15,0.22)] backdrop-blur-md lg:block"
-              style={revealDelay(560)}
-            >
-              <div className="mb-10 flex items-center justify-between">
-                <span className="text-xs uppercase tracking-normal text-red-300">
-                  Entity Link
-                </span>
-                <Orbit className="size-5 text-red-300" />
-              </div>
-              <div className="space-y-5">
-                {["Presence", "Tension", "Conversion"].map((item, index) => (
-                  <div key={item}>
-                    <div className="mb-2 flex items-center justify-between">
-                      <span>{item}</span>
-                      <span className="text-red-300">{88 + index * 4}%</span>
-                    </div>
-                    <div className="h-1 overflow-hidden rounded-full bg-white/8">
-                      <div
-                        className="h-full rounded-full bg-[#FF2D2D] shadow-[0_0_18px_rgba(255,45,45,0.7)]"
-                        style={{ width: `${88 + index * 4}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      <section id="capabilities" className="relative px-5 py-24 sm:px-8 lg:py-32">
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,#000_0%,#080101_48%,#000_100%)]" />
-        <div className="relative mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Capabilities"
-            title="Tools for interfaces that feel alive."
-            description="Each layer is built to serve the atmosphere first, then guide the visitor into a deliberate action."
-          />
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {capabilities.map((item, index) => {
-              const Icon = item.icon;
-
-              return (
-                <Card
-                  key={item.title}
-                  className="reveal group rounded-md border border-red-500/10 bg-white/[0.03] py-0 text-white shadow-none backdrop-blur-md transition-all duration-300 hover:border-red-400/35 hover:shadow-[0_0_34px_rgba(255,45,45,0.18)]"
-                  style={revealDelay(index * 110)}
-                >
-                  <PlaceholderFrame
-                    comment={item.imageComment}
-                    src={item.imageSrc}
-                    alt={`${item.title} visual`}
-                    className="aspect-[16/10] rounded-b-none border-x-0 border-t-0"
-                  />
-                  <CardHeader className="px-5 pt-5">
-                    <div className="mb-2 flex size-10 items-center justify-center rounded-md border border-red-500/20 bg-red-500/10 text-red-300">
-                      <Icon className="size-5" />
-                    </div>
-                    <CardTitle className="text-xl font-semibold text-white">
-                      {item.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-5 pb-6">
-                    <CardDescription className="text-base leading-7 text-white/58">
-                      {item.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="process" className="px-5 py-24 sm:px-8 lg:py-32">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Process"
-            title="A ritual path from weak signal to dominant presence."
-            description="The work does not move through generic phases. It grows, changes, and sharpens until the page can hold attention."
-          />
-
-          <div className="reveal relative grid gap-8 lg:grid-cols-4">
-            <div className="absolute left-0 top-7 hidden h-px w-full bg-red-500/20 shadow-[0_0_22px_rgba(255,45,45,0.5)] lg:block" />
-            {process.map((item, index) => (
-              <div
-                key={item.label}
-                className="relative"
-                style={revealDelay(index * 120)}
-              >
-                <div className="mb-5 flex size-14 items-center justify-center rounded-full border border-red-500/30 bg-black text-red-200 shadow-[0_0_24px_rgba(255,45,45,0.18)]">
-                  <span className="size-2 rounded-full bg-[#FF2D2D] shadow-[0_0_16px_rgba(255,45,45,0.8)]" />
-                </div>
-                <h3 className="text-xl font-semibold text-white">{item.label}</h3>
-                <p className="mt-4 max-w-sm text-sm leading-7 text-white/58">
-                  {item.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="works"
-        className="relative px-5 py-24 sm:px-8 lg:py-32"
-      >
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,#000_0%,#090101_52%,#000_100%)]" />
-        <div className="relative mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Selected Works"
-            title="Frames reserved for the worlds you want to reveal."
-            description="A set of cinematic interface worlds shaped around launch momentum, conversion pressure, content intelligence, and product presence."
-          />
-
-          <div className="grid gap-5 md:grid-cols-2">
-            {works.map((item, index) => (
-              <article
-                key={item.title}
-                className="reveal group relative overflow-hidden rounded-md border border-red-500/10 bg-white/[0.03] transition duration-300 hover:border-red-400/35"
-                style={revealDelay(index * 100)}
-              >
-                <PlaceholderFrame
-                  comment={item.imageComment}
-                  src={item.imageSrc}
-                  alt={`${item.title} visual`}
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="aspect-[16/11] rounded-none border-0 transition duration-500 group-hover:scale-[1.02]"
-                />
-                <div className="absolute inset-0 bg-red-600/0 transition duration-300 group-hover:bg-red-600/12" />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/78 to-transparent p-5">
-                  <p className="text-xs font-semibold uppercase tracking-normal text-red-300">
-                    {item.category}
-                  </p>
-                  <h3 className="mt-2 text-2xl font-semibold text-white">
-                    {item.title}
-                  </h3>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-24 sm:px-8 lg:py-32">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Design System"
-            title="A restrained system for an aggressive mood."
-            description="Black carries the experience, red marks intent, and every element stays subordinate to the moving background entity."
-          />
-
-          <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="reveal rounded-md border border-white/8 bg-white/[0.03] p-5 backdrop-blur-md">
-              <div className="grid gap-3 sm:grid-cols-5">
-                {palette.map((color) => (
-                  <div key={color.name} className="rounded-md border border-white/8 p-3">
-                    <div className={cn("mb-4 h-24 rounded-md", color.className)} />
-                    <p className="text-sm font-semibold text-white">{color.name}</p>
-                    <p className="mt-1 text-xs text-white/50">{color.value}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div
-              className="reveal rounded-md border border-white/8 bg-white/[0.03] p-6 backdrop-blur-md"
-              style={revealDelay(120)}
-            >
-              <p className="text-xs font-semibold uppercase tracking-normal text-red-300">
-                Type and Controls
-              </p>
-              <p className="mt-5 text-4xl font-black leading-none text-white">
-                Something is watching.
-              </p>
-              <p className="mt-4 text-base leading-7 text-white/58">
-                Let&apos;s make them stay with sharp hierarchy, durable spacing,
-                and actions that glow only when they matter.
-              </p>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <button
-                  className={cn(
-                    buttonVariants({ size: "lg" }),
-                    "h-12 rounded-lg bg-[#FF2D2D] px-6 text-white shadow-[0_0_20px_rgba(255,45,45,0.6)] hover:bg-red-500"
-                  )}
-                >
-                  Start the Project
-                  <Sparkles />
-                </button>
-                <button
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "lg" }),
-                    "h-12 rounded-lg border-white/20 bg-transparent px-6 text-white hover:border-red-400/60 hover:bg-red-500/10"
-                  )}
-                >
-                  View Works
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" className="relative px-5 py-24 sm:px-8 lg:py-32">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(138,15,15,0.55),transparent_44%),linear-gradient(180deg,#000_0%,#080101_100%)]" />
-        <div className="ritual-grid absolute inset-0 opacity-25" />
-        <div className="reveal relative mx-auto max-w-4xl text-center">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-normal text-red-300">
-            Final Invocation
-          </p>
-          <h2 className="text-4xl font-black leading-tight text-white sm:text-6xl">
-            Ready to summon something extraordinary?
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-white/62 sm:text-lg">
-            Bring the story, product, or campaign. We will shape the interface
-            into something visitors remember before they understand why.
-          </p>
-          <a
-            href="#contact"
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "mt-9 h-12 rounded-lg bg-[#FF2D2D] px-6 text-white shadow-[0_0_20px_rgba(255,45,45,0.6)] hover:bg-red-500"
-            )}
+          <ScrollStoryStage
+            scrollTargetId="top"
+            className="relative z-10 h-full w-full"
           >
-            Start the Project
-            <ArrowRight />
-          </a>
+            <HeroStoryPanel />
+            <CapabilitiesStoryPanel />
+            <ProcessStoryPanel />
+            <WorksStoryPanel />
+            <DesignSystemStoryPanel />
+            <FinalInvocationStoryPanel />
+          </ScrollStoryStage>
         </div>
       </section>
 
